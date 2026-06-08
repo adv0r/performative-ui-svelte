@@ -1,0 +1,6 @@
+performative-ui-svelte is a Svelte port of performative-ui by vorpus:
+https://github.com/vorpus/performativeUI
+
+The original package is marked MIT licensed in its package.json and README.
+This port keeps the visual language, public component catalog, and shared CSS
+class naming while adapting the implementation to idiomatic Svelte.
