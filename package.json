@@ -1,0 +1,70 @@
+{
+  "name": "performative-ui-svelte",
+  "version": "0.1.0",
+  "private": false,
+  "description": "AI-native Svelte components that signal how oversubscribed your funding round is.",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adv0r/performative-ui-svelte.git"
+  },
+  "homepage": "https://adv0r.github.io/performative-ui-svelte/",
+  "bugs": {
+    "url": "https://github.com/adv0r/performative-ui-svelte/issues"
+  },
+  "keywords": [
+    "svelte",
+    "sveltekit",
+    "components",
+    "ai",
+    "landing-page",
+    "parody",
+    "design-system"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "package": "svelte-package",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "build": "NODE_ENV=production vite build && npm run package",
+    "build:docs": "NODE_ENV=production vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "prepack": "npm run package"
+  },
+  "peerDependencies": {
+    "svelte": "^5.0.0"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-static": "^3.0.10",
+    "@sveltejs/kit": "^2.64.0",
+    "@sveltejs/package": "^2.5.8",
+    "@sveltejs/vite-plugin-svelte": "^7.1.2",
+    "@types/node": "^24.10.1",
+    "svelte": "^5.56.3",
+    "svelte-check": "^4.3.4",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.16"
+  }
+}

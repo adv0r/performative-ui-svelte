@@ -1,0 +1,12 @@
+node_modules
+.svelte-kit
+.playwright-mcp
+dist
+build
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+.context/*
+!.context/.gitkeep
