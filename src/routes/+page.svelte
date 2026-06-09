@@ -357,7 +357,7 @@
 
   .hero {
     position: relative;
-    min-height: 92vh;
+    min-height: min(860px, calc(100svh - 120px));
     overflow: hidden;
     border-bottom: 1px solid var(--pui-border);
   }
@@ -474,6 +474,10 @@
     max-width: 1180px;
     margin: 0 auto;
     padding: 76px 22px;
+  }
+
+  #catalog {
+    padding-top: 40px;
   }
 
   .section__head {
@@ -614,7 +618,29 @@
     }
 
     .hero__content {
+      gap: 16px;
+      padding-top: 34px;
+      padding-bottom: 24px;
       text-align: left;
+    }
+
+    h1 {
+      font-size: 40px;
+      line-height: 1;
+    }
+
+    .hero__content > p {
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .hero .status-line {
+      max-width: calc(100% - 118px);
+      justify-content: flex-start;
+    }
+
+    #catalog {
+      padding-top: 24px;
     }
 
     .hero__actions,
