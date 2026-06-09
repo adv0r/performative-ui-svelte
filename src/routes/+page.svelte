@@ -270,7 +270,7 @@
         </div>
       </div>
 
-      <div class="example-grid">
+      <div class="example-grid pricing-grid">
         <PricingCard featured>
           <PricingCardFlag>Most performative</PricingCardFlag>
           <PricingCardTier>Pro</PricingCardTier>
@@ -566,6 +566,10 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 22px;
+  }
+
+  .pricing-grid {
+    grid-template-columns: minmax(280px, 0.75fr) minmax(0, 1.25fr);
   }
 
   .conversation,
