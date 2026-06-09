@@ -14,8 +14,28 @@
 
 ## Install
 
+The package is not published to the npm registry yet. For v1, install it directly from GitHub:
+
 ```bash
-npm install performative-ui-svelte
+npm install github:adv0r/performative-ui-svelte#main
+```
+
+Pin a branch, tag, or commit when you need reproducible installs:
+
+```bash
+npm install github:adv0r/performative-ui-svelte#conductor/vorpus-svelte-port
+npm install github:adv0r/performative-ui-svelte#<commit-sha-or-tag>
+```
+
+The GitHub install runs the package `prepare` script, which builds `dist/` with `@sveltejs/package`. Keep lifecycle scripts enabled for this dependency. If your install environment disables scripts, use the tarball flow instead:
+
+```bash
+# in this repo
+npm install
+npm pack
+
+# in the consuming app
+npm install /path/to/performative-ui-svelte-0.1.0.tgz
 ```
 
 Import the global component styles once:

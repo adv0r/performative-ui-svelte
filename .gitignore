@@ -1,6 +1,7 @@
 node_modules
 .svelte-kit
 .playwright-mcp
+.gstack
 dist
 build
 .DS_Store

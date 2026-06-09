@@ -270,7 +270,7 @@
         </div>
       </div>
 
-      <div class="example-grid">
+      <div class="example-grid pricing-grid">
         <PricingCard featured>
           <PricingCardFlag>Most performative</PricingCardFlag>
           <PricingCardTier>Pro</PricingCardTier>
@@ -357,7 +357,7 @@
 
   .hero {
     position: relative;
-    min-height: 92vh;
+    min-height: min(860px, calc(100svh - 120px));
     overflow: hidden;
     border-bottom: 1px solid var(--pui-border);
   }
@@ -476,6 +476,10 @@
     padding: 76px 22px;
   }
 
+  #catalog {
+    padding-top: 40px;
+  }
+
   .section__head {
     display: grid;
     gap: 16px;
@@ -564,6 +568,10 @@
     gap: 22px;
   }
 
+  .pricing-grid {
+    grid-template-columns: minmax(280px, 0.75fr) minmax(0, 1.25fr);
+  }
+
   .conversation,
   .ascii-wrap {
     min-height: 340px;
@@ -614,7 +622,29 @@
     }
 
     .hero__content {
+      gap: 16px;
+      padding-top: 34px;
+      padding-bottom: 24px;
       text-align: left;
+    }
+
+    h1 {
+      font-size: 40px;
+      line-height: 1;
+    }
+
+    .hero__content > p {
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .hero .status-line {
+      max-width: calc(100% - 118px);
+      justify-content: flex-start;
+    }
+
+    #catalog {
+      padding-top: 24px;
     }
 
     .hero__actions,
