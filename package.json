@@ -51,7 +51,7 @@
     "build": "NODE_ENV=production vite build && npm run package",
     "build:docs": "NODE_ENV=production vite build",
     "preview": "vite preview --host 0.0.0.0",
-    "prepack": "npm run package"
+    "prepare": "npm run package"
   },
   "peerDependencies": {
     "svelte": "^5.0.0"
