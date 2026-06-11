@@ -36,6 +36,7 @@ export { default as ChatFABBody } from "./components/ChatFABBody.svelte";
 
 export { default as LogoMarquee } from "./components/LogoMarquee.svelte";
 export { default as LogoRow } from "./components/LogoRow.svelte";
+export { default as SlippyWords } from "./components/SlippyWords.svelte";
 export { default as StatCounter } from "./components/StatCounter.svelte";
 export { default as CommunityBadge } from "./components/CommunityBadge.svelte";
 
@@ -72,6 +73,7 @@ export type {
   LogoRowItem,
   LogoTextStyle,
   MarqueeItem,
+  SlippyWord,
   TokenStreamOptions,
   TypewriterOptions
 } from "./types.js";

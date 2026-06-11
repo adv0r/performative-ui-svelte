@@ -52,7 +52,7 @@ Import the global component styles once:
 
 ## Components
 
-The port includes all 27 components from the original catalog:
+The port includes all 28 components from the original catalog:
 
 - Atoms: `Sparkle`, `GradientText`, `StatusDot`
 - Primitives: `Button`, `EyebrowPill`, `Prompt`, `StickyBanner`
@@ -60,7 +60,7 @@ The port includes all 27 components from the original catalog:
 - Backgrounds: `Aurora`, `NodeGraphBackground`, `FloatingSparkles`
 - Surfaces: `GlassCard`, `MockIDE`
 - Conversation: `ChatBubble`, `TokenStream`, `ChatFAB`
-- Social proof: `LogoMarquee`, `LogoRow`, `StatCounter`, `CommunityBadge`
+- Social proof: `LogoMarquee`, `LogoRow`, `SlippyWords`, `StatCounter`, `CommunityBadge`
 - Pricing and conversion: `PricingCard`, `BeforeAfter`, `WaitlistForm`, `Popover`
 
 React compound components were adapted to Svelte named exports:

@@ -18,6 +18,11 @@ export type MarqueeItem =
 
 export type LogoRowItem = MarqueeItem;
 
+/** A single SlippyWords badge. A bare string is shorthand for `{ label }`. */
+export type SlippyWord =
+  | string
+  | { label: string | Snippet; key?: string; gradient?: boolean };
+
 export interface TypewriterOptions {
   words: string[];
   typeMs?: number;
