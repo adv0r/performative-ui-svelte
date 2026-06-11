@@ -1,665 +1,213 @@
 <script lang="ts">
-  import {
-    AsciiHero,
-    Aurora,
-    BeforeAfter,
-    Button,
-    ChatBubble,
-    ChatFAB,
-    ChatFABBody,
-    ChatFABHeader,
-    CommunityBadge,
-    EyebrowPill,
-    FloatingSparkles,
-    GlassCard,
-    GlassCardBody,
-    GlassCardIcon,
-    GlassCardLink,
-    GlassCardTitle,
-    GradientText,
-    LogoMarquee,
-    LogoRow,
-    MockIDE,
-    NodeGraphBackground,
-    Popover,
-    PricingCard,
-    PricingCardAmount,
-    PricingCardBlurb,
-    PricingCardCTA,
-    PricingCardFeatures,
-    PricingCardFlag,
-    PricingCardTier,
-    Prompt,
-    PromptHero,
-    Rotator,
-    SlippyWords,
-    Sparkle,
-    StatCounter,
-    StatusDot,
-    StickyBanner,
-    TokenStream,
-    WaitlistForm,
-    WordRoll
-  } from "$lib";
-  import type { IdeToken, MarqueeItem } from "$lib";
+  import { base } from "$app/paths";
+  import { Button, EyebrowPill, GradientText, Sparkle, WordRoll } from "$lib";
+  import { COMPONENTS, CATEGORIES, DOCS_BASE_URL, PACKAGE_REPO } from "$lib/docs/catalog.js";
+  import CodeBlock from "$lib/docs/CodeBlock.svelte";
+  import CommandTabs from "$lib/docs/CommandTabs.svelte";
 
-  type CatalogItem = {
-    category: string;
-    name: string;
-    snark: string;
-    props: string;
-  };
-
-  const components: CatalogItem[] = [
-    { category: "Atoms", name: "Sparkle", snark: "Add sparkle to any noun to ship it twice as fast.", props: "glyph, solid, static" },
-    { category: "Atoms", name: "GradientText", snark: "When italic is not billion-dollar enough.", props: "as, static, children" },
-    { category: "Atoms", name: "StatusDot", snark: "Always green, even when it is not.", props: "color, static" },
-    { category: "Primitives", name: "Button", snark: "We made the button move so you would click the button.", props: "variant, size, sparkle, loading, block, as" },
-    { category: "Primitives", name: "EyebrowPill", snark: "Where the model name goes when there is nothing else to say.", props: "icon, statusColor" },
-    { category: "Primitives", name: "Prompt", snark: "The textarea every AI builder ships instead of explaining the product.", props: "value, models, model, onSubmit, toolbar controls" },
-    { category: "Banners", name: "StickyBanner", snark: "Funding news disguised as utility.", props: "hideSparkle, trailing" },
-    { category: "Heroes", name: "Rotator", snark: "Because saying everything was not ambitious enough.", props: "words, typeMs, deleteMs, holdMs, loop" },
-    { category: "Heroes", name: "WordRoll", snark: "Breadth-flexing without making the visitor wait for typing.", props: "words, intervalMs, transitionMs, direction, gradient" },
-    { category: "Heroes", name: "PromptHero", snark: "We replaced the value prop with a text input.", props: "value, onChange, onSubmit, ctaLabel, hideCta" },
-    { category: "Heroes", name: "AsciiHero", snark: "For hackers, by people who follow the right newsletters.", props: "variant plus asciiField options" },
-    { category: "Backgrounds", name: "Aurora", snark: "Three blobs and a generation defined.", props: "blobs, blur, static, animated, repulsion" },
-    { category: "Backgrounds", name: "NodeGraphBackground", snark: "A neural network, conceptually.", props: "density, speed, linkDistance, hover controls" },
-    { category: "Backgrounds", name: "FloatingSparkles", snark: "Magic does not ship itself.", props: "count, glyphs, durationS, sizeRange" },
-    { category: "Surfaces", name: "GlassCard", snark: "Backdrop-filter: ambition.", props: "breathing, glowOnHover plus named subcomponents" },
-    { category: "Surfaces", name: "MockIDE", snark: "Real code is coming. This is the trailer.", props: "filename, tokens, loop, charMs, thinkingLabel" },
-    { category: "Conversation", name: "ChatBubble", snark: "If it is in a bubble, it must be true.", props: "role, agent, thinking, icon" },
-    { category: "Conversation", name: "TokenStream", snark: "See it think, slower on purpose.", props: "text, speedMs, tokenize, loop, hideCaret" },
-    { category: "Conversation", name: "ChatFAB", snark: "There is no escape now.", props: "label, open, defaultOpen, onOpenChange, popover" },
-    { category: "Social Proof", name: "LogoMarquee", snark: "Trusted by everyone you have heard of.", props: "logos, speed, gap, fade, pauseOnHover" },
-    { category: "Social Proof", name: "LogoRow", snark: "Static logos are for when you only have six.", props: "heading, logos" },
-    { category: "Social Proof", name: "SlippyWords", snark: "Buzzwords that physically move when you scroll. Motion design, allegedly.", props: "rows, intensity, startDirection, gap, fade, gradient, static" },
-    { category: "Social Proof", name: "StatCounter", snark: "Numbers that go up are better than numbers that do not.", props: "target, durationMs, from, format" },
-    { category: "Social Proof", name: "CommunityBadge", snark: "Stars are the new MAU.", props: "icon, iconNode, title, subtitle" },
-    { category: "Pricing and Conversion", name: "PricingCard", snark: "The middle one is glowing. Choose accordingly.", props: "featured plus named subcomponents" },
-    { category: "Pricing and Conversion", name: "BeforeAfter", snark: "On the left: chaos. On the right: us.", props: "before, after, brand, labels" },
-    { category: "Pricing and Conversion", name: "WaitlistForm", snark: "Demand we manufactured ourselves.", props: "placeholder, ctaLabel, footnote, onSubmit" },
-    { category: "Pricing and Conversion", name: "Popover", snark: "The modal that specifically does not close by default.", props: "open, timer, title, closeLabel, close controls" }
+  type ManagerId = "npm" | "pnpm" | "bun" | "yarn";
+  const managers = [
+    { id: "npm" as const, label: "npm", install: `npm install ${PACKAGE_REPO}` },
+    { id: "pnpm" as const, label: "pnpm", install: `pnpm add ${PACKAGE_REPO}` },
+    { id: "bun" as const, label: "bun", install: `bun add ${PACKAGE_REPO}` },
+    { id: "yarn" as const, label: "yarn", install: `yarn add ${PACKAGE_REPO}` }
   ];
-
-  const categories = [...new Set(components.map((c) => c.category))];
-
-  const logos: MarqueeItem[] = [
-    { kind: "text", text: "OpenAI", style: "bold" },
-    { kind: "text", text: "YC", style: "serif" },
-    { kind: "text", text: "Vercel", style: "bold" },
-    { kind: "text", text: "Anthropic", style: "serif" },
-    { kind: "text", text: "Linear", style: "bold" },
-    { kind: "text", text: "NASA", style: "bold" }
-  ];
-
-  const codeTokens: IdeToken[] = [
-    { c: "// generated by synthetica\n", cls: "com" },
-    { c: "export async function ", cls: "key" },
-    { c: "POST", cls: "fn" },
-    { c: "(req: Request) {\n" },
-    { c: "  const ", cls: "key" },
-    { c: "{ prompt } " },
-    { c: "= ", cls: "key" },
-    { c: "await req.", cls: "" },
-    { c: "json", cls: "fn" },
-    { c: "();\n" },
-    { c: "  return ", cls: "key" },
-    { c: "stream", cls: "fn" },
-    { c: "({ model: " },
-    { c: '"frontier"', cls: "str" },
-    { c: ", prompt });\n" },
-    { c: "}\n" }
-  ];
-
-  const slippyRows = [
-    ["agentic", "multimodal", "RAG-native", "zero-shot", "fine-tuned", "frontier-grade", "context-aware"],
-    ["SOC 2", "HIPAA", "on-prem", "GDPR-ready", "sub-100ms", "infinitely scalable", "enterprise"],
-    ["10x faster", "human-in-the-loop", "self-healing", "observable", "vector-first", "real-time"]
-  ];
-
-  let theme = $state<"dark" | "light">("dark");
-  let promptResult = $state("No prompt submitted yet.");
-  let waitlistResult = $state("Waiting for demand.");
-  let popoverOpen = $state(false);
-
-  function setTheme(next: "dark" | "light") {
-    theme = next;
-  }
+  let manager = $state<ManagerId>("npm");
+  const installCode = $derived(managers.find((m) => m.id === manager)?.install ?? managers[0].install);
 </script>
 
 <svelte:head>
-  <title>performative-ui-svelte | AI-native Svelte Components</title>
+  <title>performative-ui-svelte · AI-native Svelte Components</title>
   <meta
     name="description"
-    content="A Svelte port of performative-ui, with 28 AI-native landing page components."
+    content="Drop-in Svelte 5 port of performative-ui. 28 components, one CSS import, zero Tailwind required."
   />
 </svelte:head>
 
-<div class="docs" data-theme={theme}>
-  <StickyBanner>
-    performative-ui-svelte is a full Svelte port of the MIT React original
-  </StickyBanner>
-
-  <header class="hero">
-    <Aurora animated />
-    <NodeGraphBackground density={38} baseOpacity={0.25} />
-    <FloatingSparkles count={16} />
-    <nav class="nav" aria-label="Primary">
-      <a href="#top" class="brand">performative-ui-svelte</a>
-      <div class="nav__links">
-        <a href="#catalog">Catalog</a>
-        <a href="#examples">Examples</a>
-        <a href="https://github.com/adv0r/performative-ui-svelte">GitHub</a>
-      </div>
-      <div class="theme-toggle" role="group" aria-label="Theme">
-        <button class:active={theme === "dark"} onclick={() => setTheme("dark")}>Dark</button>
-        <button class:active={theme === "light"} onclick={() => setTheme("light")}>Light</button>
-      </div>
-    </nav>
-
-    <div id="top" class="hero__content">
-      <EyebrowPill>28 components · MIT licensed · Svelte 5</EyebrowPill>
-      <h1>
-        AI-native Svelte components for
-        <GradientText>
-          <WordRoll words={["startups", "demos", "landing pages", "agent apps"]} gradient />
-        </GradientText>
-      </h1>
-      <p>
-        A faithful Svelte port of performative-ui: the same theatrical components,
-        now packaged for Svelte projects.
-      </p>
-      <PromptHero
-        placeholder="Describe the overfunded interface..."
-        onSubmit={(value: string) => (promptResult = `PromptHero submitted: ${value || "(empty)"}`)}
-      />
-      <div class="hero__actions">
-        <Button as="a" href="#examples" variant="glow" sparkle>View examples</Button>
-        <Button as="a" href="https://github.com/vorpus/performativeUI" variant="ghost">Original React project</Button>
-      </div>
-      <p class="status-line"><StatusDot /> {promptResult}</p>
+<article class="home">
+  <header class="home__hero">
+    <EyebrowPill>28 components · MIT · zero runtime deps</EyebrowPill>
+    <h1>
+      AI-native Svelte components for
+      <GradientText><WordRoll words={["startups", "demos", "landing pages", "agent apps"]} gradient /></GradientText>
+    </h1>
+    <p>
+      A faithful port of <a href="https://github.com/vorpus/performativeUI">performative-ui</a> with per-component docs,
+      live examples, props tables, and a package install that works without Tailwind.
+    </p>
+    <div class="home__actions">
+      <Button as="a" href="{base}/getting-started" variant="glow" sparkle>Get started</Button>
+      <Button as="a" href="{base}/components/sparkle" variant="ghost">Browse components</Button>
+      <Button as="a" href="{base}/demo" variant="ghost">Live demo</Button>
     </div>
   </header>
 
-  <main>
-    <section id="catalog" class="section">
-      <div class="section__head">
-        <EyebrowPill icon={false}>Catalog</EyebrowPill>
-        <h2>Every original component, ported</h2>
+  <section class="home__section">
+    <h2>Install in one command</h2>
+    <p>No npm publish yet — install directly from GitHub, import one CSS file, ship.</p>
+    <CommandTabs
+      tabs={managers.map((m) => ({ id: m.id, label: m.label }))}
+      selected={manager}
+      onSelect={(id) => (manager = id as ManagerId)}
+      code={`${installCode}
+
+# In your root layout:
+import "performative-ui-svelte/styles.css";`}
+    />
+    <CodeBlock
+      code={`import { Button, GradientText, Sparkle } from "performative-ui-svelte";
+
+<h1>Ship <GradientText>agentic workflows</GradientText> <Sparkle /></h1>
+<Button variant="glow" sparkle>Generate</Button>`}
+    />
+  </section>
+
+  <section class="home__section">
+    <h2>Why this port</h2>
+    <div class="home__grid">
+      <div class="home__card">
+        <h3>Drop-in package</h3>
+        <p>One CSS import. No Tailwind config, no registry scaffolding, no `@source` scanning.</p>
       </div>
-      {#each categories as category}
-        <div class="category">
-          <h3>{category}</h3>
-          <div class="catalog-grid">
-            {#each components.filter((component) => component.category === category) as component}
-              <article class="catalog-card">
-                <div>
-                  <p class="catalog-card__category">{component.category}</p>
-                  <h4>{component.name}</h4>
-                  <p>{component.snark}</p>
-                </div>
-                <code>{component.props}</code>
-              </article>
-            {/each}
-          </div>
-        </div>
-      {/each}
-    </section>
-
-    <section id="examples" class="section examples">
-      <div class="section__head">
-        <EyebrowPill>Live examples</EyebrowPill>
-        <h2>Enough demo surface to verify the port</h2>
+      <div class="home__card">
+        <h3>Upstream fidelity</h3>
+        <p>Same `.pui-*` styling model as the React original — not a utility-class rewrite.</p>
       </div>
-
-      <div class="example-band compact">
-        <h3>Atoms and primitives</h3>
-        <div class="inline-demo">
-          <span class="large-inline">Generate <Sparkle /></span>
-          <GradientText as="strong">Gradient text</GradientText>
-          <span class="status-line"><StatusDot color="#fbbf24" /> Degraded optimism</span>
-          <Button variant="glow" sparkle>Generate</Button>
-          <Button variant="shimmer">Start building</Button>
-          <Button variant="ghost">Talk to sales</Button>
-          <Button variant="solid">Upgrade</Button>
-          <Button variant="wave">Request demo</Button>
-        </div>
+      <div class="home__card">
+        <h3>Actions included</h3>
+        <p>Reusable <a href="{base}/actions">typewriter, counter, token stream, and ascii field</a> helpers.</p>
       </div>
-
-      <div class="example-band">
-        <h3>Prompt input</h3>
-        <Prompt
-          onSubmit={(value: string, ctx: { model?: string }) => (promptResult = `Prompt submitted to ${ctx.model}: ${value || "(empty)"}`)}
-          toolbarExtras={cmdHint}
-        />
-        <p class="status-line">{promptResult}</p>
+      <div class="home__card">
+        <h3>LLM-friendly</h3>
+        <p>Machine-readable catalog at <a href="{base}/llms.txt">{DOCS_BASE_URL}/llms.txt</a>.</p>
       </div>
+    </div>
+  </section>
 
-      <div class="example-grid">
-        <GlassCard breathing>
-          <GlassCardIcon>+</GlassCardIcon>
-          <GlassCardTitle>Reason over everything</GlassCardTitle>
-          <GlassCardBody>
-            Multi-step, multi-modal, multi-vendor workflows, presented as if the demo already closed the round.
-          </GlassCardBody>
-          <GlassCardLink href="#catalog">Inspect catalog</GlassCardLink>
-        </GlassCard>
-
-        <MockIDE filename="route.ts" tokens={codeTokens} />
-      </div>
-
-      <div class="example-grid">
-        <div class="conversation">
-          <ChatBubble role="user">Can you automate our entire roadmap?</ChatBubble>
-          <ChatBubble role="ai" agent="Synthi" thinking="reasoning...">
-            <TokenStream
-              text="Yes. I have created a 14-step plan, a waitlist form, and a gradient."
-              loop
-            />
-          </ChatBubble>
-        </div>
-
-        <div class="ascii-wrap">
-          <AsciiHero colorful baseOpacity={0.45} spotlightOpacity={1} />
+  <section class="home__section">
+    <h2>Component catalog</h2>
+    {#each CATEGORIES as category}
+      <div class="home__category">
+        <h3>{category}</h3>
+        <div class="home__catalog">
+          {#each COMPONENTS.filter((c) => c.category === category) as component (component.slug)}
+            <a class="home__catalog-card" href="{base}/components/{component.slug}">
+              <strong>{component.name}</strong>
+              <span>{component.snark}</span>
+            </a>
+          {/each}
         </div>
       </div>
-
-      <div class="example-band">
-        <h3>Social proof</h3>
-        <LogoMarquee {logos} pauseOnHover />
-        <LogoRow heading="Backed by operators from" {logos} />
-        <SlippyWords rows={slippyRows} />
-        <div class="stats">
-          <p><StatCounter target={51842} /> builders joined</p>
-          <CommunityBadge
-            href="https://github.com/adv0r/performative-ui-svelte"
-            title="Star us on GitHub"
-            subtitle="1,337 stars · +184 this week"
-          />
-        </div>
-      </div>
-
-      <div class="example-grid pricing-grid">
-        <PricingCard featured>
-          <PricingCardFlag>Most performative</PricingCardFlag>
-          <PricingCardTier>Pro</PricingCardTier>
-          <PricingCardAmount unit="/mo">$49</PricingCardAmount>
-          <PricingCardBlurb>For founders who need an agentic website before revenue.</PricingCardBlurb>
-          <PricingCardFeatures>
-            <li>Unlimited prompts</li>
-            <li>Priority shimmer</li>
-            <li>Investor-grade blur</li>
-          </PricingCardFeatures>
-          <PricingCardCTA href="#examples">Upgrade</PricingCardCTA>
-        </PricingCard>
-
-        <BeforeAfter
-          brand="Synthetica"
-          before={["Manual onboarding", "Messy dashboards", "Stakeholders asking for ROI"]}
-          after={["Autonomous agents", "One animated command center", "A crisp waitlist metric"]}
-        />
-      </div>
-
-      <div class="example-band">
-        <h3>Conversion</h3>
-        <WaitlistForm
-          footnote="No spam. Just weekly gradients."
-          onSubmit={(email: string) => (waitlistResult = `Waitlist submitted: ${email || "(empty)"}`)}
-        />
-        <p class="status-line">{waitlistResult}</p>
-        <Button variant="ghost" onclick={() => (popoverOpen = true)}>Open popover</Button>
-      </div>
-    </section>
-  </main>
-
-  <ChatFAB>
-    {#snippet popover()}
-      <ChatFABHeader>Hi, I am Synthi.</ChatFABHeader>
-      <ChatFABBody>
-        Ask me anything about gradients, agent workflows, or valuation optics.
-      </ChatFABBody>
-    {/snippet}
-  </ChatFAB>
-
-  <Popover
-    open={popoverOpen}
-    onOpenChange={(open: boolean) => (popoverOpen = open)}
-    title="Join the waitlist"
-    closeLabel="Maybe later"
-    closeOnEscape
-    closeOnBackdrop
-  >
-    <WaitlistForm onSubmit={(email: string) => {
-      waitlistResult = `Popover waitlist submitted: ${email || "(empty)"}`;
-      popoverOpen = false;
-    }} />
-  </Popover>
-</div>
-
-{#snippet cmdHint()}
-  <span class="cmd-hint">Cmd+Enter</span>
-{/snippet}
+    {/each}
+  </section>
+</article>
 
 <style>
-  :global(html) {
-    scroll-behavior: smooth;
-  }
-
-  :global(body) {
-    margin: 0;
-    background: var(--pui-bg);
-    color: var(--pui-fg);
-    font-family: var(--pui-font-sans);
-  }
-
-  :global(*) {
-    box-sizing: border-box;
-  }
-
-  .docs {
-    min-height: 100vh;
-    background:
-      radial-gradient(circle at 20% 0%, rgba(124, 58, 237, 0.15), transparent 30%),
-      radial-gradient(circle at 90% 20%, rgba(6, 182, 212, 0.13), transparent 28%),
-      var(--pui-bg);
-  }
-
-  .hero {
-    position: relative;
-    min-height: min(860px, calc(100svh - 120px));
-    overflow: hidden;
-    border-bottom: 1px solid var(--pui-border);
-  }
-
-  .nav {
-    position: relative;
-    z-index: 5;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    max-width: 1180px;
-    margin: 0 auto;
-    padding: 22px;
-  }
-
-  .brand,
-  .nav a {
-    color: var(--pui-fg);
-    text-decoration: none;
-  }
-
-  .brand {
-    font-weight: 800;
-  }
-
-  .nav__links {
-    display: flex;
-    gap: 18px;
-    color: var(--pui-fg-dim);
-    font-size: 14px;
-  }
-
-  .theme-toggle {
-    display: inline-flex;
-    gap: 4px;
-    padding: 3px;
-    border: 1px solid var(--pui-border);
-    border-radius: 9px;
-    background: var(--pui-glass-soft);
-  }
-
-  .theme-toggle button {
-    border: 0;
-    border-radius: 7px;
-    padding: 7px 10px;
-    color: var(--pui-fg-dim);
-    background: transparent;
-    cursor: pointer;
-  }
-
-  .theme-toggle button.active {
-    color: var(--pui-fg);
-    background: var(--pui-overlay-strong);
-  }
-
-  .hero__content {
-    position: relative;
-    z-index: 4;
-    display: grid;
-    gap: 22px;
+  .home {
     max-width: 920px;
     margin: 0 auto;
-    padding: clamp(56px, 8vw, 110px) 22px 72px;
-    text-align: center;
+    padding: 48px 24px 96px;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  p {
-    margin-top: 0;
+  .home__hero {
+    display: grid;
+    gap: 18px;
+    margin-bottom: 56px;
   }
 
   h1 {
-    margin-bottom: 0;
-    font-size: clamp(44px, 7vw, 88px);
-    line-height: 0.95;
-    letter-spacing: 0;
+    margin: 0;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 0.98;
   }
 
   h2 {
-    margin-bottom: 0;
-    font-size: clamp(30px, 4vw, 52px);
-    line-height: 1;
-    letter-spacing: 0;
+    margin: 0 0 12px;
+    font-size: 28px;
   }
 
   h3 {
-    margin-bottom: 16px;
-    font-size: 20px;
-  }
-
-  .hero__content > p {
-    max-width: 660px;
-    margin: 0 auto;
-    color: var(--pui-fg-dim);
+    margin: 0 0 8px;
     font-size: 18px;
-    line-height: 1.7;
   }
 
-  .hero__actions,
-  .inline-demo,
-  .stats {
+  .home__hero > p,
+  .home__section > p {
+    margin: 0;
+    color: var(--pui-fg-dim);
+    line-height: 1.65;
+    font-size: 17px;
+  }
+
+  .home__hero a,
+  .home__card a {
+    color: var(--pui-fg);
+  }
+
+  .home__actions {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
     gap: 12px;
   }
 
-  .section {
-    max-width: 1180px;
-    margin: 0 auto;
-    padding: 76px 22px;
-  }
-
-  #catalog {
-    padding-top: 40px;
-  }
-
-  .section__head {
+  .home__section {
     display: grid;
     gap: 16px;
-    margin-bottom: 34px;
+    margin-bottom: 56px;
   }
 
-  .category {
-    margin-top: 34px;
-  }
-
-  .catalog-grid {
+  .home__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 14px;
   }
 
-  .catalog-card,
-  .example-band,
-  .conversation,
-  .ascii-wrap {
+  .home__card,
+  .home__catalog-card {
     border: 1px solid var(--pui-border);
     border-radius: var(--pui-radius);
     background: var(--pui-glass-soft);
     box-shadow: var(--pui-shadow-card);
   }
 
-  .catalog-card {
-    display: grid;
-    align-content: space-between;
-    min-height: 190px;
+  .home__card {
     padding: 18px;
   }
 
-  .catalog-card__category {
-    margin-bottom: 8px;
-    color: var(--pui-fg-mute);
-    font-size: 12px;
-    text-transform: uppercase;
-  }
-
-  .catalog-card h4 {
-    margin-bottom: 8px;
-    font-size: 18px;
-  }
-
-  .catalog-card p {
+  .home__card p {
+    margin: 0;
     color: var(--pui-fg-dim);
     line-height: 1.55;
-  }
-
-  code,
-  .cmd-hint {
-    font-family: var(--pui-font-mono);
-    font-size: 12px;
-  }
-
-  code {
-    color: var(--pui-fg-dim);
-  }
-
-  .examples {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 22px;
-  }
-
-  .examples > *,
-  .example-grid > * {
-    min-width: 0;
-  }
-
-  .example-band {
-    width: 100%;
-    min-width: 0;
-    padding: 24px;
-  }
-
-  .compact {
-    display: grid;
-    gap: 16px;
-  }
-
-  .example-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 22px;
-  }
-
-  .pricing-grid {
-    grid-template-columns: minmax(280px, 0.75fr) minmax(0, 1.25fr);
-  }
-
-  .conversation,
-  .ascii-wrap {
-    min-height: 340px;
-    padding: 22px;
-  }
-
-  .conversation {
-    display: grid;
-    align-content: center;
-    gap: 14px;
-  }
-
-  .ascii-wrap {
-    display: grid;
-    place-items: center;
-  }
-
-  .large-inline {
-    font-size: 30px;
-    font-weight: 700;
-  }
-
-  .status-line {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    color: var(--pui-fg-dim);
     font-size: 14px;
   }
 
-  .cmd-hint {
-    color: var(--pui-fg-mute);
+  .home__category {
+    margin-top: 24px;
   }
 
-  @media (max-width: 760px) {
-    .nav {
-      align-items: flex-start;
-      flex-direction: column;
-    }
+  .home__catalog {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+  }
 
-    .nav__links {
-      flex-wrap: wrap;
-    }
+  .home__catalog-card {
+    display: grid;
+    gap: 8px;
+    padding: 16px;
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
 
-    .example-grid {
-      grid-template-columns: minmax(0, 1fr);
-    }
+  .home__catalog-card:hover {
+    border-color: var(--pui-border-bright);
+    transform: translateY(-1px);
+  }
 
-    .hero__content {
-      gap: 16px;
-      padding-top: 34px;
-      padding-bottom: 24px;
-      text-align: left;
-    }
-
-    h1 {
-      font-size: 40px;
-      line-height: 1;
-    }
-
-    .hero__content > p {
-      font-size: 16px;
-      line-height: 1.55;
-    }
-
-    .hero .status-line {
-      max-width: calc(100% - 118px);
-      justify-content: flex-start;
-    }
-
-    #catalog {
-      padding-top: 24px;
-    }
-
-    .hero__actions,
-    .inline-demo,
-    .stats {
-      justify-content: flex-start;
-    }
+  .home__catalog-card span {
+    color: var(--pui-fg-dim);
+    font-size: 13px;
+    line-height: 1.45;
   }
 </style>

@@ -12,6 +12,16 @@
   <a href="https://github.com/vorpus/performativeUI"><b>Original React project</b></a>
 </p>
 
+## Documentation
+
+Live docs at [adv0r.github.io/performative-ui-svelte](https://adv0r.github.io/performative-ui-svelte/):
+
+- **Per-component pages** with live examples, props tables, and install snippets
+- **Getting started** guide — GitHub install, no Tailwind required
+- **Theme generator** — tweak `--pui-*` CSS custom properties and copy the block
+- **Actions reference** — `createTypewriter`, `createCounter`, `createTokenStream`, `asciiField`
+- **llms.txt** — machine-readable catalog for AI tooling
+
 ## Install
 
 The package is not published to the npm registry yet. For v1, install it directly from GitHub:
