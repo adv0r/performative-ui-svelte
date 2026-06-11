@@ -32,6 +32,7 @@
     Prompt,
     PromptHero,
     Rotator,
+    SlippyWords,
     Sparkle,
     StatCounter,
     StatusDot,
@@ -71,6 +72,7 @@
     { category: "Conversation", name: "ChatFAB", snark: "There is no escape now.", props: "label, open, defaultOpen, onOpenChange, popover" },
     { category: "Social Proof", name: "LogoMarquee", snark: "Trusted by everyone you have heard of.", props: "logos, speed, gap, fade, pauseOnHover" },
     { category: "Social Proof", name: "LogoRow", snark: "Static logos are for when you only have six.", props: "heading, logos" },
+    { category: "Social Proof", name: "SlippyWords", snark: "Buzzwords that physically move when you scroll. Motion design, allegedly.", props: "rows, intensity, startDirection, gap, fade, gradient, static" },
     { category: "Social Proof", name: "StatCounter", snark: "Numbers that go up are better than numbers that do not.", props: "target, durationMs, from, format" },
     { category: "Social Proof", name: "CommunityBadge", snark: "Stars are the new MAU.", props: "icon, iconNode, title, subtitle" },
     { category: "Pricing and Conversion", name: "PricingCard", snark: "The middle one is glowing. Choose accordingly.", props: "featured plus named subcomponents" },
@@ -109,6 +111,12 @@
     { c: "}\n" }
   ];
 
+  const slippyRows = [
+    ["agentic", "multimodal", "RAG-native", "zero-shot", "fine-tuned", "frontier-grade", "context-aware"],
+    ["SOC 2", "HIPAA", "on-prem", "GDPR-ready", "sub-100ms", "infinitely scalable", "enterprise"],
+    ["10x faster", "human-in-the-loop", "self-healing", "observable", "vector-first", "real-time"]
+  ];
+
   let theme = $state<"dark" | "light">("dark");
   let promptResult = $state("No prompt submitted yet.");
   let waitlistResult = $state("Waiting for demand.");
@@ -123,7 +131,7 @@
   <title>performative-ui-svelte | AI-native Svelte Components</title>
   <meta
     name="description"
-    content="A Svelte port of performative-ui, with 27 AI-native landing page components."
+    content="A Svelte port of performative-ui, with 28 AI-native landing page components."
   />
 </svelte:head>
 
@@ -150,7 +158,7 @@
     </nav>
 
     <div id="top" class="hero__content">
-      <EyebrowPill>27 components · MIT licensed · Svelte 5</EyebrowPill>
+      <EyebrowPill>28 components · MIT licensed · Svelte 5</EyebrowPill>
       <h1>
         AI-native Svelte components for
         <GradientText>
@@ -260,6 +268,7 @@
         <h3>Social proof</h3>
         <LogoMarquee {logos} pauseOnHover />
         <LogoRow heading="Backed by operators from" {logos} />
+        <SlippyWords rows={slippyRows} />
         <div class="stats">
           <p><StatCounter target={51842} /> builders joined</p>
           <CommunityBadge
