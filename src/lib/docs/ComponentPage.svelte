@@ -1,0 +1,91 @@
+<script lang="ts">
+  import type { Component } from "svelte";
+  import { base } from "$app/paths";
+  import type { ComponentMeta } from "./catalog.js";
+  import { ORDERED_COMPONENTS } from "./catalog.js";
+  import InstallTabs from "./InstallTabs.svelte";
+  import PropsTable from "./PropsTable.svelte";
+
+  let { meta, examples }: { meta: ComponentMeta; examples?: Component } = $props();
+
+  const Examples = $derived(examples);
+  let next = $derived.by(() => {
+    const idx = ORDERED_COMPONENTS.findIndex((c) => c.slug === meta.slug);
+    return idx >= 0 && idx < ORDERED_COMPONENTS.length - 1 ? ORDERED_COMPONENTS[idx + 1] : null;
+  });
+</script>
+
+<article>
+  <header class="cp-header">
+    <div class="cp-eyebrow"><span>{meta.category}</span></div>
+    <h1 class="cp-title">{meta.name}</h1>
+    <p class="cp-snark">{meta.snark}</p>
+  </header>
+
+  <section class="cp-section">
+    <p class="cp-description">{meta.description}</p>
+    {#if meta.sources?.length}
+      <ul class="cp-sources">
+        {#each meta.sources as source (source.url)}
+          <li><a href={source.url} rel="noopener noreferrer">{source.name}</a></li>
+        {/each}
+      </ul>
+    {/if}
+  </section>
+
+  <section class="cp-section">
+    <h2 class="cp-section__title">Install</h2>
+    <InstallTabs componentName={meta.name} />
+  </section>
+
+  <section class="cp-section">
+    <h2 class="cp-section__title">Examples</h2>
+    {#if Examples}
+      <Examples />
+    {:else}
+      <p class="cp-description">Examples coming soon.</p>
+    {/if}
+  </section>
+
+  <section class="cp-section">
+    <h2 class="cp-section__title">Props</h2>
+    <PropsTable props={meta.props} />
+    {#each meta.subprops ?? [] as sp (sp.name)}
+      <div class="cp-subprops">
+        <div class="cp-subprops__title">{sp.name}</div>
+        <PropsTable props={sp.props} />
+      </div>
+    {/each}
+  </section>
+
+  {#if next}
+    <a href="{base}/components/{next.slug}" class="cp-skim-next">
+      <span class="cp-skim-next__label">Next</span>
+      <span class="cp-skim-next__name">{next.name}</span>
+      <span class="cp-skim-next__hint"><kbd>]</kbd></span>
+      <span class="cp-skim-next__arrow">→</span>
+    </a>
+  {/if}
+</article>
+
+<style>
+  .cp-sources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--pui-fg-mute);
+    font-size: 13px;
+  }
+
+  .cp-sources a {
+    color: var(--pui-fg-dim);
+    text-decoration: none;
+  }
+
+  .cp-sources a:hover {
+    color: var(--pui-fg);
+  }
+</style>
